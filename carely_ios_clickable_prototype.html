@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Health Connect — Doctor Consultation Prototype</title>
+<style>
+:root{HealthConnect
+  --blue:#1769ff; --blue2:#0b55d8; --ink:#10213b; --muted:#6d7b91; --bg:#f4f7fb;
+  --card:#fff; --line:#e6ebf2; --green:#19a974; Carely--red:#e85d75; --shadow:0 12px 35px rgba(24,49,88,.10);
+}
+*{box-sizing:border-box} body{margin:0;background:#dfe5ee;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Arial,sans-serif;color:var(--ink)}
+.phone{width:390px;min-height:844px;margin:28px auto;background:var(--bg);border-radius:42px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.25);position:relative;border:8px solid #111}
+.status{height:42px;padding:14px 20px 0;display:flex;justify-content:space-between;font-size:13px;font-weight:700;background:#fff}
+.screen{display:none;min-height:794px;padding-bottom:74px}.screen.active{display:block}
+.header{background:#fff;padding:18px 20px 20px}.header h1{margin:0;font-size:29px;letter-spacing:-.7px}.header p{margin:7px 0 0;color:var(--muted);font-size:14px}
+.search{margin:16px 20px;background:#eef2f7;border-radius:15px;padding:13px 15px;color:#7c889a;font-size:15px}
+.chips{display:flex;gap:8px;padding:0 20px 18px;overflow:hidden}.chip{background:#fff;border:1px solid var(--line);padding:9px 13px;border-radius:20px;white-space:nowrap;font-size:13px;font-weight:600}.chip.sel{background:#eaf1ff;color:var(--blue);border-color:#cfe0ff}
+.card{background:var(--card);margin:0 20px 13px;border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+.doc{display:flex;gap:13px}.avatar{width:56px;height:56px;border-radius:17px;background:linear-gradient(145deg,#b7d5ff,#e7efff);display:grid;place-items:center;font-size:28px}.doc h3{margin:0;font-size:17px}.doc p{margin:4px 0;color:var(--muted);font-size:13px}.rating{color:#f59f00;font-size:13px;font-weight:700}.meta{display:flex;gap:10px;margin:13px 0;color:#52647c;font-size:12px}.meta span{background:#f4f6f9;padding:7px 9px;border-radius:9px}
+.btn{border:0;border-radius:14px;padding:14px 18px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;width:100%;cursor:pointer}.btn.secondary{background:#edf3ff;color:var(--blue)}.btn.green{background:var(--green)}.back{font-size:16px;background:none;border:0;padding:0;color:var(--blue);cursor:pointer;font-weight:600}
+.topbar{padding:18px 20px;background:#fff;display:flex;align-items:center;gap:14px}.topbar h2{margin:0;font-size:20px}
+.detail{background:#fff;padding:20px}.hero{display:flex;gap:15px;align-items:center}.hero .avatar{width:72px;height:72px;border-radius:22px;font-size:36px}.hero h1{font-size:21px;margin:0}.hero p{font-size:13px;color:var(--muted);margin:5px 0}.section{padding:18px 20px}.section h3{margin:0 0 12px;font-size:16px}.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.slot{padding:13px 8px;text-align:center;background:#fff;border:1.5px solid var(--line);border-radius:12px;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s}.slot:hover{border-color:var(--blue);background:#fafbfc}.slot.active{border:2.5px solid var(--blue);color:var(--blue);font-weight:700;background:#f1f6ff;transform:scale(1.03);box-shadow:0 4px 12px rgba(23,105,255,0.15)}
+.info{display:flex;gap:10px;background:#f0f7ff;border-radius:14px;padding:13px;font-size:12px;color:#4e6280}.sticky{position:absolute;bottom:74px;left:0;right:0;padding:13px 20px 20px;background:rgba(255,255,255,.94);backdrop-filter:blur(15px);border-top:1px solid var(--line)}
+.steps{display:flex;gap:5px;margin:0 20px 20px}.step{height:4px;flex:1;background:#dfe6ef;border-radius:3px}.step.done,.step.now{background:var(--blue)}
+.field{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:11px}.field label{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}.field strong{font-size:14px}
+.confirm{margin:20px;background:#fff;border-radius:22px;padding:20px;box-shadow:var(--shadow)}.check{width:64px;height:64px;border-radius:50%;background:#e8fbf3;color:var(--green);display:grid;place-items:center;font-size:32px;margin:4px auto 15px}.confirm h2{text-align:center;margin:0;font-size:23px}.confirm p{text-align:center;color:var(--muted);font-size:13px;line-height:1.5}.summary{background:#f7f9fc;border-radius:15px;padding:14px;margin:17px 0}.row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px}.row span:first-child{color:var(--muted)}
+.count{display:inline-block;background:#fff1f4;color:#d64261;padding:6px 9px;border-radius:9px;font-size:11px;font-weight:700}
+.dropdown-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:14px;background:#fff;border:1px solid var(--line);border-radius:15px;margin-bottom:11px}.dropdown-header h3{margin:0;font-size:15px;font-weight:600}.dropdown-arrow{font-size:18px;color:var(--muted);transition:transform 0.3s}.dropdown-arrow.open{transform:rotate(180deg)}.dropdown-content{max-height:0;overflow:hidden;transition:max-height 0.3s ease-out}.dropdown-content.open{max-height:1000px;margin-bottom:11px}
+#bookingSection{opacity:0;transform:translateY(-10px);transition:opacity 0.3s ease-out, transform 0.3s ease-out}#bookingSection.show{opacity:1;transform:translateY(0)}
+.call{margin:18px 20px;background:#17263f;border-radius:28px;height:360px;color:#fff;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}.call .face{width:130px;height:130px;border-radius:50%;background:linear-gradient(145deg,#8fb7e8,#dceaff);display:grid;place-items:center;font-size:62px}.call .label{position:absolute;bottom:18px;left:20px;font-size:14px;font-weight:600}.controls{display:flex;justify-content:center;gap:14px}.ctrl{width:54px;height:54px;border-radius:50%;background:#fff;border:0;font-size:21px;cursor:pointer}.ctrl.end{background:#ef5a68;color:#fff}
+.nav{position:absolute;bottom:0;left:0;right:0;height:74px;background:rgba(255,255,255,.96);border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center}.nav button{border:0;background:none;color:#8b97a8;font-size:11px}.nav button.active{color:var(--blue);font-weight:700}.nav b{display:block;font-size:19px;margin-bottom:3px}
+.toast{position:absolute;left:20px;right:20px;top:58px;background:#17263f;color:#fff;padding:12px 14px;border-radius:13px;font-size:12px;z-index:5;display:none}
+@media(max-width:500px){.phone{margin:0;width:100%;min-height:100vh;border:0;border-radius:0}.status{padding-top:12px}.screen{min-height:calc(100vh - 42px)}}
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="status"><span>9:41</span><span>● ● ▰</span></div>
+<div id="toast" class="toast"></div>
+
+<section id="home" class="screen active">
+  <div class="header"><h1>Health Connect</h1><p>Good afternoon · Care that fits your day.</p></div>
+  <div class="search" style="cursor:text" onclick="openSearch()">⌕ &nbsp; <span id="searchPlaceholder">Search symptoms, doctors or specialties</span></div>
+  <div class="chips"><div class="chip sel">For you</div><div class="chip">General care</div><div class="chip">Skin</div><div class="chip">Mental health</div></div>
+  <div class="card">
+    <div class="doc"><div class="avatar">👩🏻‍⚕️</div><div><h3>Dr. Maya Rao</h3><p>General Physician · 11 yrs</p><div class="rating">★ 4.9 · 1.2k consults</div></div></div>
+    <div class="meta"><span>Video</span><span>₹499</span><span>Available today</span></div>
+    <button class="btn secondary" onclick="show('doctor')">View availability</button>
+  </div>
+  <div class="card">
+    <div class="doc"><div class="avatar">👨🏽‍⚕️</div><div><h3>Dr. Arjun Mehta</h3><p>Internal Medicine · 14 yrs</p><div class="rating">★ 4.8 · 860 consults</div></div></div>
+    <div class="meta"><span>Video</span><span>₹599</span><span>Tomorrow</span></div>
+    <button class="btn secondary" onclick="show('doctor')">View availability</button>
+  </div>
+  <div class="nav"><button class="active"><b>⌂</b>Home</button><button onclick="show('doctor')"><b>◷</b>Appointments</button><button onclick="show('health')"><b>♡</b>Health</button><button onclick="show('profile')"><b>☻</b>Profile</button></div>
+</section>
+
+<section id="search" class="screen"><div class="topbar"><button class="back" onclick="show('home')">‹ Back</button><h2>Search</h2></div><div style="padding:16px 20px"><input id="searchInput" oninput="filterSearch()" placeholder="Doctor, symptom or specialty" style="width:100%;padding:15px;border:1px solid var(--line);border-radius:15px;font-size:15px;outline:none"></div><div class="section" style="padding-top:0"><h3 id="searchHeading">Try searching for</h3><div id="searchResults"></div></div><div class="nav"><button onclick="show('home')"><b>⌂</b>Home</button><button onclick="show('doctor')"><b>◷</b>Appointments</button><button onclick="show('health')"><b>♡</b>Health</button><button onclick="show('profile')"><b>☻</b>Profile</button></div></section>
+<section id="health" class="screen"><div class="header"><h1>Your health</h1><p>Keep your care information in one place.</p></div><div class="card"><div class="doc"><div class="avatar">♡</div><div><h3>Health snapshot</h3><p>Your recent care at a glance</p></div></div><div class="meta"><span id="appointmentCount">2 appointments</span><span>1 prescription</span><span>Last visit: Sept 20</span></div><button class="btn secondary" onclick="toast('Health history opened')">View health history</button></div><div id="appointmentsList"><div class="card"><h3 style="margin-top:0">Upcoming</h3><div class="field"><label>TODAY · 5:30 PM</label><strong>Dr. Maya Rao · Video consultation</strong></div><div class="field"><label>REASON</label><strong>Headache for 3 days · Moderate severity</strong></div><button class="btn green" onclick="show('call')">Join consultation</button></div></div><div class="card"><h3 style="margin-top:0">Health vitals</h3><div class="meta"><span>Blood Pressure: 120/80</span><span>Heart Rate: 72 bpm</span></div><div class="meta" style="margin-top:8px"><span>Weight: 68 kg</span><span>Height: 170 cm</span></div></div><div class="nav"><button onclick="show('home')"><b>⌂</b>Home</button><button onclick="show('booked')"><b>◷</b>Appointments</button><button class="active"><b>♡</b>Health</button><button onclick="show('profile')"><b>☻</b>Profile</button></div></section>
+<section id="profile" class="screen"><div class="header"><h1>Profile</h1><p>Manage your Carely experience.</p></div><div class="card"><div class="doc"><div class="avatar">👤</div><div><h3>Alex Morgan</h3><p>Carely member since 2024</p></div></div><div class="meta" style="margin-top:12px"><span>Age: 32</span><span>Blood: O+</span><span>Gender: Male</span></div></div><div class="card"><div class="field" onclick="showProfileDetail('personal')" style="cursor:pointer"><strong>Personal information</strong><span style="float:right;color:var(--muted)">›</span></div><div class="field" onclick="showProfileDetail('medical')" style="cursor:pointer"><strong>Medical information</strong><span style="float:right;color:var(--muted)">›</span></div><div class="field" onclick="showProfileDetail('payment')" style="cursor:pointer"><strong>Payment methods</strong><span style="float:right;color:var(--muted)">›</span></div><div class="field" onclick="showProfileDetail('notifications')" style="cursor:pointer"><strong>Notifications</strong><span style="float:right;color:var(--muted)">›</span></div><div class="field" onclick="showProfileDetail('privacy')" style="cursor:pointer"><strong>Privacy & security</strong><span style="float:right;color:var(--muted)">›</span></div></div><div class="nav"><button onclick="show('home')"><b>⌂</b>Home</button><button onclick="show('booked')"><b>◷</b>Appointments</button><button onclick="show('health')"><b>♡</b>Health</button><button class="active"><b>☻</b>Profile</button></div></section>
+
+<section id="profilePersonal" class="screen"><div class="topbar"><button class="back" onclick="show('profile')">‹ Back</button><h2>Personal information</h2></div><div class="section"><div class="field"><label>EMAIL</label><strong>alex.morgan@email.com</strong></div><div class="field"><label>PHONE</label><strong>+91 98765 43210</strong></div><div class="field"><label>DATE OF BIRTH</label><strong>15 March 1994</strong></div><div class="field"><label>ADDRESS</label><strong>123 MG Road, Bangalore, KA 560001</strong></div><button class="btn secondary" onclick="toast('Edit personal information')">Edit details</button></div><div class="nav"><button onclick="show('home')"><b>⌂</b>Home</button><button onclick="show('booked')"><b>◷</b>Appointments</button><button onclick="show('health')"><b>♡</b>Health</button><button class="active" onclick="show('profile')"><b>☻</b>Profile</button></div></section>
+
+<section id="profileMedical" class="screen"><div class="topbar"><button class="back" onclick="show('profile')">‹ Back</button><h2>Medical information</h2></div><div class="section"><div class="field"><label>ALLERGIES</label><strong>Penicillin</strong></div><div class="field"><label>CHRONIC CONDITIONS</label><strong>None</strong></div><div class="field"><label>CURRENT MEDICATIONS</label><strong>None</strong></div><div class="field"><label>BLOOD GROUP</label><strong>O+</strong></div><div class="field"><label>EMERGENCY CONTACT</label><strong>Sarah Morgan · +91 98765 43211</strong></div><button class="btn secondary" onclick="toast('Edit medical information')">Edit details</button></div><div class="nav"><button onclick="show('home')"><b>⌂</b>Home</button><button onclick="show('booked')"><b>◷</b>Appointments</button><button onclick="show('health')"><b>♡</b>Health</button><button class="active" onclick="show('profile')"><b>☻</b>Profile</button></div></section>
+
+<section id="profilePayment" class="screen"><div class="topbar"><button class="back" onclick="show('profile')">‹ Back</button><h2>Payment methods</h2></div><div class="section"><h3>Saved payment methods</h3><div class="card" style="margin:0 0 12px"><div style="display:flex;align-items:center;gap:12px"><div style="width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-size:20px">💳</div><div style="flex:1"><h3 style="margin:0;font-size:15px">Visa •••• 4242</h3><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">Expires 12/26</p></div><span style="color:var(--muted)">›</span></div></div><div class="card" style="margin:0 0 12px"><div style="display:flex;align-items:center;gap:12px"><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#0e7fe8,#00a2ff);display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px">G</div><div style="flex:1"><h3 style="margin:0;font-size:15px">Google Pay</h3><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">alex.morgan@email.com</p></div><span style="color:var(--muted)">›</span></div></div><div class="card" style="margin:0 0 12px"><div style="display:flex;align-items:center;gap:12px"><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#5f259f,#8247ab);display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px">P</div><div style="flex:1"><h3 style="margin:0;font-size:15px">PhonePe</h3><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">+91 98765 43210</p></div><span style="color:var(--muted)">›</span></div></div><div class="card" style="margin:0 0 12px"><div style="display:flex;align-items:center;gap:12px"><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00baf2,#00d4f7);display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px">P</div><div style="flex:1"><h3 style="margin:0;font-size:15px">Paytm</h3><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">+91 98765 43210</p></div><span style="color:var(--muted)">›</span></div></div><button class="btn" onclick="toast('Add new payment method')">+ Add payment method</button></div><div class="nav"><button onclick="show('home')"><b>⌂</b>Home</button><button onclick="show('booked')"><b>◷</b>Appointments</button><button onclick="show('health')"><b>♡</b>Health</button><button class="active" onclick="show('profile')"><b>☻</b>Profile</button></div></section>
+
+<section id="profileNotifications" class="screen"><div class="topbar"><button class="back" onclick="show('profile')">‹ Back</button><h2>Notifications</h2></div><div class="section"><h3>Push notifications</h3><div class="field" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div><strong>Appointment reminders</strong><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">Get notified 10 mins before</p></div><div style="width:44px;height:26px;background:var(--blue);border-radius:13px;position:relative;cursor:pointer" onclick="toast('Toggle notification')"><div style="width:22px;height:22px;background:#fff;border-radius:50%;position:absolute;right:2px;top:2px"></div></div></div><div class="field" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div><strong>Health tips</strong><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">Weekly health insights</p></div><div style="width:44px;height:26px;background:var(--blue);border-radius:13px;position:relative;cursor:pointer" onclick="toast('Toggle notification')"><div style="width:22px;height:22px;background:#fff;border-radius:50%;position:absolute;right:2px;top:2px"></div></div></div><div class="field" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div><strong>Prescription updates</strong><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">When prescriptions are ready</p></div><div style="width:44px;height:26px;background:#dfe6ef;border-radius:13px;position:relative;cursor:pointer" onclick="toast('Toggle notification')"><div style="width:22px;height:22px;background:#fff;border-radius:50%;position:absolute;left:2px;top:2px"></div></div></div><div class="field" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div><strong>Marketing emails</strong><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">Offers and promotions</p></div><div style="width:44px;height:26px;background:#dfe6ef;border-radius:13px;position:relative;cursor:pointer" onclick="toast('Toggle notification')"><div style="width:22px;height:22px;background:#fff;border-radius:50%;position:absolute;left:2px;top:2px"></div></div></div></div><div class="nav"><button onclick="show('home')"><b>⌂</b>Home</button><button onclick="show('booked')"><b>◷</b>Appointments</button><button onclick="show('health')"><b>♡</b>Health</button><button class="active" onclick="show('profile')"><b>☻</b>Profile</button></div></section>
+
+<section id="profilePrivacy" class="screen"><div class="topbar"><button class="back" onclick="show('profile')">‹ Back</button><h2>Privacy & security</h2></div><div class="section"><h3>Account security</h3><div class="field" onclick="toast('Change password')" style="cursor:pointer"><strong>Change password</strong><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">Last changed 2 months ago</p><span style="float:right;color:var(--muted)">›</span></div><div class="field" onclick="toast('Two-factor authentication')" style="cursor:pointer"><strong>Two-factor authentication</strong><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">Not enabled</p><span style="float:right;color:var(--muted)">›</span></div></div><div class="section"><h3>Privacy settings</h3><div class="field" onclick="toast('Data sharing settings')" style="cursor:pointer"><strong>Data sharing</strong><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">Control who sees your health data</p><span style="float:right;color:var(--muted)">›</span></div><div class="field" onclick="toast('Download data')" style="cursor:pointer"><strong>Download my data</strong><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">Get a copy of your information</p><span style="float:right;color:var(--muted)">›</span></div><div class="field" onclick="toast('Delete account')" style="cursor:pointer"><strong style="color:var(--red)">Delete account</strong><p style="margin:3px 0 0;font-size:12px;color:var(--muted)">Permanently remove your data</p><span style="float:right;color:var(--muted)">›</span></div></div><div class="section"><div class="info">🔒 Your health data is encrypted and stored securely. We never share your information without your explicit consent.</div></div><div class="nav"><button onclick="show('home')"><b>⌂</b>Home</button><button onclick="show('booked')"><b>◷</b>Appointments</button><button onclick="show('health')"><b>♡</b>Health</button><button class="active" onclick="show('profile')"><b>☻</b>Profile</button></div></section>
+<section id="doctor" class="screen">
+  <div class="topbar"><button class="back" onclick="show('home')">‹ Back</button><h2>Doctor profile</h2></div>
+  <div class="detail">
+    <div class="hero"><div class="avatar">👩🏻‍⚕️</div><div><h1>Dr. Maya Rao</h1><p>General Physician · MBBS, MD</p><div class="rating">★ 4.9 · 1.2k consults</div></div></div>
+  </div>
+  <div class="section"><h3>Why patients choose her</h3><div class="info">✦ &nbsp; Explains clearly · Evidence-led · Great with first-time symptoms</div></div>
+  <div class="section"><h3>Available slots for today</h3><p style="color:var(--muted);font-size:13px;margin:0 0 12px">Tap any slot to see booking details</p><div class="chips" style="padding:0 0 12px"><div class="chip sel">Today, 6 Oct</div><div class="chip">Tomorrow</div></div>
+    <div class="slots">
+      <div class="slot" onclick="selectSlot(this, '5:30 PM')">5:30 PM</div>
+      <div class="slot" onclick="selectSlot(this, '6:00 PM')">6:00 PM</div>
+      <div class="slot" onclick="selectSlot(this, '6:30 PM')">6:30 PM</div>
+      <div class="slot" onclick="selectSlot(this, '7:00 PM')">7:00 PM</div>
+      <div class="slot" onclick="selectSlot(this, '7:30 PM')">7:30 PM</div>
+      <div class="slot" onclick="selectSlot(this, '8:00 PM')">8:00 PM</div>
+    </div>
+  </div>
+  <div class="section" id="bookingSection" style="display:none;padding-top:12px">
+    <div style="background:linear-gradient(135deg, #f0f7ff 0%, #e8f4ff 100%);border-radius:16px;padding:18px;margin-bottom:14px;border:1px solid #d4e6ff;box-shadow:0 4px 12px rgba(23,105,255,0.08)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:0.5px">SELECTED TIME</div>
+          <div style="font-size:22px;font-weight:700;color:var(--blue);margin-top:5px" id="selectedTimeDisplay">5:30 PM</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:0.5px">CONSULTATION</div>
+          <div style="font-size:22px;font-weight:700;color:var(--ink);margin-top:5px">₹499</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#4e6280;margin-top:14px;line-height:1.7">
+        <div style="margin-bottom:4px">✓ 15-minute video consultation</div>
+        <div style="margin-bottom:4px">✓ Instant booking confirmation</div>
+        <div>✓ Free reschedule (up to 30 mins before)</div>
+      </div>
+    </div>
+    <button class="btn" style="font-size:16px;padding:16px 18px" onclick="bookAppointment(selectedTime)">Book appointment for <span id="selectedTimeBtn">5:30 PM</span></button>
+  </div>
+  <div class="section" style="padding-top:8px"><h3>Before you book</h3><div class="info">📋 &nbsp; You'll complete a quick 2-minute check-in to help Dr. Rao prepare for your consultation.</div></div>
+  <div class="nav"><button onclick="show('home')"><b>⌂</b>Home</button><button class="active"><b>◷</b>Appointments</button><button onclick="show('health')"><b>♡</b>Health</button><button onclick="show('profile')"><b>☻</b>Profile</button></div>
+</section>
+
+<section id="checkin" class="screen" style="padding-bottom:148px">
+  <div class="topbar"><button class="back" onclick="show('doctor')">‹ Back</button><h2>Quick check-in</h2></div>
+  <div class="steps"><div class="step done"></div><div class="step now"></div><div class="step"></div></div>
+  <div class="section"><h3>Help Dr. Rao arrive prepared</h3><p style="color:var(--muted);font-size:13px;line-height:1.5">This is optional, but your answers can make the 15-minute consultation more focused.</p>
+    <div class="field"><label>WHAT'S GOING ON?</label><strong>Headache for 3 days</strong></div>
+    <div class="field"><label>HOW SEVERE?</label><strong>Moderate · 5/10</strong></div>
+    <div class="field"><label>ANY MEDICINES?</label><strong>Paracetamol, once yesterday</strong></div>
+    <div class="field"><label>WHAT DO YOU WANT FROM THE VISIT?</label><strong>Understand the cause + next steps</strong></div>
+    <button class="btn secondary" onclick="toast('Saved — Dr. Rao can review this before your call.')">Save check-in</button>
+  </div>
+  <div class="sticky"><button class="btn" onclick="show('confirm')">Continue to confirmation</button></div>
+  <div class="nav"><button onclick="show('home')"><b>⌂</b>Home</button><button class="active"><b>◷</b>Appointments</button><button onclick="show('health')"><b>♡</b>Health</button><button onclick="show('profile')"><b>☻</b>Profile</button></div>
+</section>
+
+<section id="confirm" class="screen">
+  <div class="topbar"><button class="back" onclick="show('checkin')">‹ Back</button><h2>Confirm booking</h2></div>
+  <div class="confirm">
+    <div class="check">✓</div><h2>You're almost there</h2><p>One tap books your private video consultation. No waiting room.</p>
+    <div class="summary">
+      <div class="row"><span>Doctor</span><strong>Dr. Maya Rao</strong></div>
+      <div class="row"><span>When</span><strong>Today · 6:00 PM</strong></div>
+      <div class="row"><span>Duration</span><strong>15 min</strong></div>
+      <div class="row"><span>Consultation</span><strong>₹499</strong></div>
+    </div>
+    <div class="info">🔒 Payment is protected. You can reschedule up to 30 minutes before the appointment.</div>
+    <br><button class="btn" onclick="addToHealth();show('booked')">Pay & book ₹499</button>
+  </div>
+  <div class="nav"><button onclick="show('home')"><b>⌂</b>Home</button><button class="active"><b>◷</b>Appointments</button><button onclick="show('health')"><b>♡</b>Health</button><button onclick="show('profile')"><b>☻</b>Profile</button></div>
+</section>
+
+<section id="booked" class="screen">
+  <div class="topbar"><button class="back" onclick="show('home')">‹ Home</button><h2>Appointment ready</h2></div>
+  <div class="confirm">
+    <div class="check">✓</div><h2>Booked for 6:00 PM</h2><p>Dr. Rao has your check-in. We'll remind you 10 minutes before.</p>
+    <div class="summary"><div class="row"><span>Today</span><strong>6:00 PM</strong></div><div class="row"><span>Format</span><strong>Video consultation</strong></div><div class="row"><span>Preparation</span><strong>2 min complete</strong></div></div>
+    <button class="btn green" onclick="show('call')">Join consultation</button>
+    <br><br><button class="btn secondary" onclick="toast('Reminder set for 5:50 PM')">Remind me</button>
+  </div>
+  <div class="nav"><button onclick="show('home')"><b>⌂</b>Home</button><button class="active"><b>◷</b>Appointments</button><button onclick="show('health')"><b>♡</b>Health</button><button onclick="show('profile')"><b>☻</b>Profile</button></div>
+</section>
+
+<section id="call" class="screen">
+  <div class="topbar"><button class="back" onclick="show('booked')">‹</button><h2>Consultation</h2><span style="margin-left:auto" class="count">12:43 left</span></div>
+  <div class="call"><div class="face">👩🏻‍⚕️</div><div class="label">Dr. Maya Rao · You are connected</div></div>
+  <div class="section"><div class="info">✦ &nbsp; Your check-in is visible to Dr. Rao, so you can get straight to the conversation.</div></div>
+  <div class="controls"><button class="ctrl">🎙</button><button class="ctrl">▣</button><button class="ctrl end" onclick="show('booked')">☎</button></div>
+</section>
+</div>
+<script>
+let selectedTime = '5:30 PM';
+let appointmentBooked = false;
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
+
+function selectSlot(el, time){
+  // Remove active class from all slots
+  document.querySelectorAll('.slot').forEach(s=>{
+    s.classList.remove('active');
+  });
+
+  // Add active class to selected slot
+  el.classList.add('active');
+
+  // Update selected time
+  selectedTime = time;
+
+  // Update the display and show booking section
+  document.getElementById('selectedTimeDisplay').textContent = time;
+  document.getElementById('selectedTimeBtn').textContent = time;
+
+  let bookingSection = document.getElementById('bookingSection');
+  bookingSection.style.display = 'block';
+
+  // Add show class for animation after display is set
+  setTimeout(() => {
+    bookingSection.classList.add('show');
+    // Scroll to booking section smoothly
+    bookingSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 10);
+}
+
+function bookAppointment(time){
+  selectedTime = time;
+  toast('Proceeding to check-in for ' + time + ' appointment');
+  setTimeout(() => show('checkin'), 800);
+}
+
+function addToHealth(){
+  appointmentBooked = true;
+  // Update appointment count
+  let count = document.getElementById('appointmentCount');
+  if(count) count.textContent = '3 appointments';
+
+  // Add new appointment to health section
+  let appointmentsList = document.getElementById('appointmentsList');
+  if(appointmentsList){
+    appointmentsList.innerHTML = `
+      <div class="card">
+        <h3 style="margin-top:0">Upcoming</h3>
+        <div class="field">
+          <label>TODAY · ${selectedTime}</label>
+          <strong>Dr. Maya Rao · Video consultation</strong>
+        </div>
+        <div class="field">
+          <label>REASON</label>
+          <strong>Headache for 3 days · Moderate severity</strong>
+        </div>
+        <button class="btn green" onclick="show('call')">Join consultation</button>
+      </div>
+    `;
+  }
+  toast('Appointment added to your health records!');
+}
+
+function toast(msg){let t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2200)}
+
+function showProfileDetail(type){
+  const screens = {
+    'personal': 'profilePersonal',
+    'medical': 'profileMedical',
+    'payment': 'profilePayment',
+    'notifications': 'profileNotifications',
+    'privacy': 'profilePrivacy'
+  };
+
+  if(screens[type]){
+    show(screens[type]);
+  }
+}
+
+const searchData=[{type:"Doctor",title:"Dr. Maya Rao",sub:"General Physician · 11 yrs"},{type:"Doctor",title:"Dr. Arjun Mehta",sub:"Internal Medicine · 14 yrs"},{type:"Specialty",title:"General Physician",sub:"Common symptoms and everyday care"},{type:"Specialty",title:"Dermatology",sub:"Skin, hair and nail concerns"},{type:"Symptom",title:"Headache",sub:"Find doctors for headache symptoms"},{type:"Symptom",title:"Fever",sub:"Find doctors for fever symptoms"}];
+
+function openSearch(){show("search");setTimeout(()=>document.getElementById("searchInput").focus(),50);renderSearch("")}
+
+function filterSearch(){renderSearch(document.getElementById("searchInput").value.toLowerCase().trim())}
+
+function renderSearch(q){let items=q?searchData.filter(x=>(x.title+" "+x.sub+" "+x.type).toLowerCase().includes(q)):searchData.slice(0,4);document.getElementById("searchHeading").textContent=q?(items.length?"Results":"No results"):"Try searching for";document.getElementById("searchResults").innerHTML=items.map(x=>`<div class="card" style="margin:0 0 10px;cursor:pointer" onclick="show('doctor')"><div class="doc"><div class="avatar">${x.type==='Doctor'?'👩🏻‍⚕️':x.type==='Symptom'?'＋':'✦'}</div><div><h3>${x.title}</h3><p>${x.sub}</p><div class="rating">${x.type}</div></div></div></div>`).join("")}
+</script>
+</body>
+</html>
